@@ -1,0 +1,18 @@
+version: '2.0.11'
+
+dir:
+  home: '/etc/uwsgi'
+  conf: '/etc/uwsgi/conf.d'
+  log: '/var/log/uwsgi'
+  venv: '/etc/uwsgi/venv'
+
+pidfile: '/var/run/uwsgi.pid'
+
+max_requests: '5000'
+harakiri: '60'
+
+logrotate_file: '/var/log/uwsgi/*.log'
+logrotate_period: '10'
+
+emperor: 'false'
+vassals_configs: []

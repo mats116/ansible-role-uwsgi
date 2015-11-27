@@ -1,0 +1,12 @@
+{{ dir.log }}/*.log {
+        daily
+        missingok
+        rotate {{ logrotate_period }}
+        compress
+        notifempty
+        create 644 im im
+        sharedscripts
+        postrotate
+                touch /var/log/uwsgi/logreopen.trigger
+        endscript
+}

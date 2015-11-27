@@ -1,0 +1,50 @@
+- name: modify directory
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+  with_items:
+    - "{{ dir.home }}"
+    - "{{ dir.conf }}"
+    - "{{ dir.log }}"
+
+- name: pip install uwsgi
+  pip:
+    name: uwsgi
+    version: "{{ version }}"
+    virtualenv: "{{ dir.venv }}"
+
+- name: modify init
+  template:
+    src: init
+    dest: /etc/init.d/uwsgi
+    owner: root
+    group: root
+    mode: 0755
+
+- name: modify uwsgi.ini
+  template:
+    src: "{{ custom_conf }}"
+    dest: /etc/uwsgi.ini
+    owner: root
+    group: root
+    mode: 0644
+
+- name: uwsgi is enabled
+  service:
+    name: uwsgi
+    state: started
+    enabled: yes
+
+- name: modify logrotate conf
+  template:
+    src: logrotate
+    dest: /etc/logrotate.d/uwsgi
+    owner: root
+    group: root
+    mode: 0644
+
+- include: emperor.yml
+  when: emperor == 'true'

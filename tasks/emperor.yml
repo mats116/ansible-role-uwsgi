@@ -1,0 +1,22 @@
+# file: roles/uwsgi/tasks/emperor.yml
+
+- name: modify directory
+  sudo: yes
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+  with_items:
+    - /etc/uwsgi/vassals
+
+- name: modify uwsgi.ini
+  sudo: yes
+  template:
+    src: "vassals/{{ item }}"
+    dest: "/etc/uwsgi/vassals/{{ item }}"
+    owner: root
+    group: root
+    mode: 0644
+  with_items: "{{ vassals_configs }}"
